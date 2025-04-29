@@ -47,12 +47,13 @@ class CustomLlamaEval(HFLM):
         pretrained='checkpoint',  # default checkpoint path
         cluster_dir='cluster',    # default cluster directory
         dist_type='inner_product',
+        device='cuda:0',
         **kwargs
     ):
         self.cluster_dir = cluster_dir
         self.dist_type = dist_type
         print("Initializing clustered llama")
-        pretrained_model = LlamaForCausalLMClustered.from_pretrained(pretrained).half().to('cuda:0')
+        pretrained_model = LlamaForCausalLMClustered.from_pretrained(pretrained).half().to(device)
         tokenizer = AutoTokenizer.from_pretrained("checkpoint")
         #pretrained_model.set_cluster_info(centroid, self.dist_type)
         super().__init__(pretrained=pretrained_model, tokenizer=tokenizer, **kwargs)
